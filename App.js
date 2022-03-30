@@ -5,20 +5,42 @@ import Buttons from './src/components/Buttons';
 import Display from './src/components/Display';
 
 
+const initialState = {
+  displayValue: '0',
+  clearDisplay: false,
+  operation: null,
+  values: [0, 0],
+  current: 0 //valor atual
+}
 //usando class para exportar o component app
 export default class App extends Component {
-  state = {
-    displayValue: '0'
-  };
+  state = {...initialState}; //spread operator
 
   addDigit = (n) => {
-    //vai setar o valor do display com o valor dado no parâmetro
-    this.setState({displayValue: n})
+    if(n === '.' && this.state.displayValue.includes('.')){
+      return
+    }
+
+    const clearDisplay = this.state.displayValue === '0' || this.state.clearDisplay
+
+    const currentValue = clearDisplay ? '' : this.state.displayValue
+
+    const displayValue = currentValue + n
+
+    this.setState({displayValue, clearDisplay: false})
+
+    if(n !== '.'){
+      const newValue = parseFloat(displayValue)
+      const values = [...this.state.values]
+      values[this.state.current] = newValue
+      this.setState({values})
+    }
   }
 
   //limpa memória da calculadora
   clearMemory = () => {
-    this.setState({displayValue: '0'})
+    //volta ao estado inicial
+    this.setState({...initialState})
   }
 
   setOperation = (operation) => {
