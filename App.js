@@ -17,11 +17,12 @@ export default class App extends Component {
   state = {...initialState}; //spread operator
 
   addDigit = (n) => {
-    if(n === '.' && this.state.displayValue.includes('.')){
+    //console.debug(typeof this.state.displayValue)
+    const clearDisplay = this.state.displayValue === '0' || this.state.clearDisplay
+
+    if(n === '.' && !clearDisplay && this.state.displayValue.includes('.')){
       return
     }
-
-    const clearDisplay = this.state.displayValue === '0' || this.state.clearDisplay
 
     const currentValue = clearDisplay ? '' : this.state.displayValue
 
@@ -44,7 +45,34 @@ export default class App extends Component {
   }
 
   setOperation = (operation) => {
+    if(this.state.current === 0){
+      //setando o operation que recebe no botao
+      //setando o current para a póxima posição no array
+      //limpando o display
+      this.setState({operation: operation, current: 1, clearDisplay: true})
+    }else {
+      const equals = operation === '='
 
+      //clone do array atual de values
+      const values = [...this.state.values]
+      try{
+        values[0] = eval(`${values[0]} ${this.state.operation} ${values[1]}`)
+      }catch(e){
+        values[0] = this.state.values[0]
+      }
+
+      values[1] = 0
+      
+      this.setState({
+        displayValue: `${values[0]}`,
+        //se digitei '=' logo vai setar null em operation, caso eu digitei outro operador 
+        //vai ser setado com o simbolo operacional que digitei
+        operation: equals ? null : operation,
+        current: equals ? 0 : 1,
+        clearDisplay: !equals,
+        values: values
+      })
+    }
   }
 
   render() {
