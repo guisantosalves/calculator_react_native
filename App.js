@@ -10,29 +10,44 @@ export default class App extends Component {
   state = {
     displayValue: '0'
   };
-  
+
+  addDigit = (n) => {
+    //vai setar o valor do display com o valor dado no parâmetro
+    this.setState({displayValue: n})
+  }
+
+  //limpa memória da calculadora
+  clearMemory = () => {
+    this.setState({displayValue: '0'})
+  }
+
+  setOperation = (operation) => {
+
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
         <Display value={this.state.displayValue}/>
         <View style={styles.buttons}>
-          <Buttons label="AC" />
-          <Buttons label="/" />
-          <Buttons label="7" />
-          <Buttons label="8" />
-          <Buttons label="9" />
-          <Buttons label="*" />
-          <Buttons label="4" />
-          <Buttons label="5" />
-          <Buttons label="6" />
-          <Buttons label="-" />
-          <Buttons label="1" />
-          <Buttons label="2" />
-          <Buttons label="3" />
-          <Buttons label="+" />
-          <Buttons label="0" />
-          <Buttons label="." />
-          <Buttons label="=" />
+          {/* nao preciso passar como arrow function pq ja passo no componente buttons */}
+          <Buttons label="AC" triple onClick={this.clearMemory}/>
+          <Buttons label="/" operation onClick={this.setOperation}/>
+          <Buttons label="7" onClick={this.addDigit}/>
+          <Buttons label="8" onClick={this.addDigit}/>
+          <Buttons label="9" onClick={this.addDigit}/>
+          <Buttons label="*" operation onClick={this.setOperation}/>
+          <Buttons label="4" onClick={this.addDigit}/>
+          <Buttons label="5" onClick={this.addDigit}/>
+          <Buttons label="6" onClick={this.addDigit}/>
+          <Buttons label="-" operation onClick={this.setOperation}/>
+          <Buttons label="1" onClick={this.addDigit}/>
+          <Buttons label="2" onClick={this.addDigit}/>
+          <Buttons label="3" onClick={this.addDigit}/>
+          <Buttons label="+" operation onClick={this.setOperation}/>
+          <Buttons label="0" double onClick={this.addDigit}/>
+          <Buttons label="." onClick={this.addDigit}/>
+          <Buttons label="=" operation onClick={this.setOperation}/>
         </View>
       </SafeAreaView>
     );
